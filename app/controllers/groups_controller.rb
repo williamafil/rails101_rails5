@@ -12,7 +12,8 @@ before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
 
   def show
     @group = Group.find(params[:id])
-    @posts = @group.posts.order("created_at DESC")
+    #@posts = @group.posts.order("created_at DESC")
+    @posts = @group.posts.recent
   end
 
   def create
