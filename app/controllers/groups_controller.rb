@@ -50,6 +50,30 @@ before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
     redirect_to groups_path
   end
 
+  def join
+    @group = Group.find(params[:id])
+
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice] = "You've joined this group"
+    end
+
+    redirect_to group_path(@group)
+  end
+
+  def quit
+    @group = Group.find(params[:id])
+
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:alert] = "You've quit this group"
+    else
+      flash[:warning] = "You are not in this group"
+    end
+
+    redirect_to group_path(@group)
+  end
+
   private
 
   def group_params
